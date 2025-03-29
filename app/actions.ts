@@ -29,7 +29,7 @@ export async function server_login(
 
   const user = await getUser(username);
 
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { error } = await supabase.auth.signInWithPassword({
     email: user.email,
     password: password,
   });
@@ -92,8 +92,12 @@ export async function server_editProfile(formData: FormData) {
 
 // devices actions
 export async function server_getDevices() {
-  const { data: devices, error }: { data: Device[] | null; error: any } =
-    await supabase.from("devices").select("*");
+  const {
+    data: devices,
+    error,
+  }: { data: Device[] | null; error: Error | null } = await supabase
+    .from("devices")
+    .select("*");
 
   return { devices, error };
 }
@@ -124,12 +128,14 @@ export async function server_getDevicesInDate(month: number, year: number) {
   const startDate = new Date(year, month - 1, 1).toISOString(); // بداية الشهر
   const endDate = new Date(year, month, 0, 23, 59, 59).toISOString(); // نهاية الشهر
 
-  const { data: devices, error }: { data: Device[] | null; error: any } =
-    await supabase
-      .from("devices")
-      .select("*")
-      .gte("created_at", startDate)
-      .lte("created_at", endDate);
+  const {
+    data: devices,
+    error,
+  }: { data: Device[] | null; error: Error | null } = await supabase
+    .from("devices")
+    .select("*")
+    .gte("created_at", startDate)
+    .lte("created_at", endDate);
 
   return { devices, error };
 }

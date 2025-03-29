@@ -5,7 +5,7 @@ const uploadProof = async (file: File) => {
   const fileName = `${new Date().getTime()}.${fileExt}`;
   const filePath = `${fileName}`;
 
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from("proofs")
     .upload(filePath, file, { upsert: true });
 

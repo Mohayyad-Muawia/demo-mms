@@ -13,7 +13,7 @@ type LoginState = {
 };
 
 export default function Login() {
-  const [state, setState] = useState<LoginState | null>(null);
+  const [state] = useState<LoginState | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 

@@ -15,7 +15,7 @@ interface StatBoxProps {
   label: string;
   value: number | "--";
   color: string;
-  svg: any;
+  svg: React.ReactNode;
 }
 
 export default function Statistics() {

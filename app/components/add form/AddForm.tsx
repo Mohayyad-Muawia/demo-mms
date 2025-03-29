@@ -60,7 +60,7 @@ const PopupForm = () => {
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, "");
+    const value = e.target.value.replace(/\D/g, "");
     setPrice(value ? Number(value).toLocaleString() : ""); // إظهار فارغ عند عدم الإدخال
   };
 
