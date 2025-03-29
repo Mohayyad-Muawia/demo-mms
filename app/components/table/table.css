@@ -1,0 +1,110 @@
+.table-box {
+  margin-top: 15px;
+
+  > h2 {
+    margin-bottom: 20px;
+  }
+
+  table {
+    width: 100%;
+
+    thead {
+      border-block: 1px solid var(--ghost);
+    }
+    th,
+    td {
+      padding: 10px;
+      text-align: center;
+
+      button {
+        padding: 7px;
+
+        svg {
+          width: 22px;
+          height: 22px;
+          fill: none !important;
+          stroke: #f1f2ee;
+        }
+      }
+    }
+    .badge p {
+      padding: 6px 12px;
+      border-radius: 14px;
+      font-size: 12px;
+      width: fit-content;
+      margin: auto;
+      font-weight: bold;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    /* Device Status Styles */
+    .maintenance p {
+      background-color: var(--light-red);
+      color: #e63946;
+    }
+
+    .ready p {
+      background-color: var(--light-yellow);
+      color: #f2cb05;
+    }
+
+    .delivered p {
+      background-color: var(--light-green);
+      color: #52b788;
+    }
+
+    /* Payment Status Styles */
+    .bank p {
+      background-color: #f1a75138;
+      color: #e9971d;
+    }
+
+    .receipt p {
+      background-color: #0278bd3a;
+      color: #0277bd;
+    }
+
+    .cash p {
+      background-color: var(--light-green);
+      color: #52b788;
+    }
+
+    .unpaid p {
+      background-color: #66666621;
+      color: #666666;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .table-box {
+    margin-bottom: 60px;
+    th,
+    td {
+      font-size: 11px;
+      padding: 7px !important;
+
+      button {
+        padding: 8px !important;
+        svg {
+          width: 16px !important;
+          height: 16px !important;
+        }
+      }
+    }
+    .badge {
+      p {
+        padding: 0px !important;
+        background-color: var(--secondary) !important;
+      }
+    }
+  }
+}
