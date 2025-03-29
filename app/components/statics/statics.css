@@ -112,7 +112,7 @@ header {
     padding: 11px;
 
     svg {
-      color: var(--text);
+      color: var(--text) !important;
       fill: none;
       width: 22px;
       height: 22px;
