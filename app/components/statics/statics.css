@@ -216,6 +216,7 @@ header {
   display: none;
   background: var(--secondary);
   box-shadow: var(--shadow);
+  transition: var(--transition);
 
   a {
     display: flex;
