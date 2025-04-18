@@ -1,0 +1,98 @@
+.profile {
+  display: grid;
+  place-content: center;
+  height: calc(100% - 100px);
+  padding: 20px;
+
+  .card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+
+    .avatar {
+      position: relative;
+      img {
+        border-radius: var(--radius-2);
+        aspect-ratio: 1/1;
+        width: 300px;
+      }
+    }
+
+    .info {
+      flex: 1;
+      display: flex;
+      flex-flow: column;
+      font-weight: bold;
+      justify-content: space-between;
+      height: 100%;
+      min-width: 220px;
+
+      > div {
+        h1 {
+          /* font-weight: normal; */
+          opacity: 0.5;
+          font-size: 14px;
+        }
+        p {
+          font-weight: bold;
+        }
+      }
+    }
+
+    .btns {
+      display: flex;
+      flex-flow: column;
+      gap: 15px;
+
+      width: 100%;
+    }
+  }
+  /* edit */
+  .edit {
+    .avatar {
+      button {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        padding: 5px;
+
+        svg {
+          width: 25px;
+          height: 25px;
+        }
+      }
+    }
+
+    input {
+      border-color: var(--ghost);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .profile {
+    height: fit-content;
+    .card {
+      flex-flow: column;
+      margin-top: 40px;
+
+      .avatar img {
+        width: 260px;
+      }
+
+      .info {
+        padding: 0;
+        width: 100%;
+        gap: 20px;
+
+        > div {
+        }
+      }
+      .btns {
+        margin-top: 20px;
+      }
+    }
+  }
+}
+/* 2700794 */

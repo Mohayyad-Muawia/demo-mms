@@ -1,0 +1,155 @@
+.addForm {
+  /* Overlay */
+
+  h2 {
+    text-align: start;
+  }
+
+  /* Pop-up Form */
+  .popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    width: 60vw;
+    background: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    border-radius: var(--radius-1);
+    box-shadow: var(--shadow);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  /* Show when active */
+  .popup.show,
+  .overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .popup.show {
+    transform: translate(-50%, -50%) scale(1);
+    z-index: 99;
+  }
+
+  /* Form Styling */
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .half {
+    width: calc(50% - 10px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+    transition: var(--transition);
+  }
+
+  .full {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  form label {
+    margin-top: 10px;
+    font-weight: bold;
+    text-align: start;
+  }
+
+  form input,
+  select,
+  #filebtn {
+    border: 1px solid var(--secondary);
+  }
+
+  label.required::after {
+    content: " *";
+    color: #e63946;
+    margin-left: 10px;
+  }
+
+  #filebtn {
+    cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  .hidden {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  select {
+    padding: 7px;
+
+    option {
+      background: var(--bg);
+    }
+  }
+
+  .btns {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+    width: 100%;
+
+    button {
+      flex: 1;
+      padding: 10px 20px;
+    }
+    button:disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
+  .proof-btns {
+    display: flex;
+    gap: 20px;
+    justify-content: stretch;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .addForm {
+    .popup {
+      width: 100vw;
+    }
+    form {
+      input {
+        font-size: 12px;
+      }
+      label {
+        font-size: 12px;
+      }
+    }
+    .btns {
+      button {
+        font-size: 14px;
+      }
+    }
+    .proof-btns {
+      font-size: 12px;
+      height: 100%;
+
+      svg {
+        width: 26px !important;
+        height: 26px !important;
+      }
+    }
+  }
+}
