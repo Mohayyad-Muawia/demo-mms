@@ -1,5 +1,5 @@
 "use server";
-import {supabase, supabaseAdmin} from "./supabase/supabase";
+import {supabase} from "./supabase/supabase";
 import { UserType } from "./context/useUserStore";
 import uploadAvatar from "./supabase/uploadAvatar";
 import { Device } from "./context/useDevicesStore";
