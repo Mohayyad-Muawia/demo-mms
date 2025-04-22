@@ -1,5 +1,5 @@
 "use server";
-import supabase from "./supabase/supabase";
+import {supabase, supabaseAdmin} from "./supabase/supabase";
 import { UserType } from "./context/useUserStore";
 import uploadAvatar from "./supabase/uploadAvatar";
 import { Device } from "./context/useDevicesStore";
@@ -233,4 +233,16 @@ export async function sendReport(formData: FormData) {
   });
 
   return { success: true, message: "تم إرسال الإبلاغ بنجاح!" };
+}
+
+
+// users
+export async function getAllUsers() {
+  const { data: users, error } = await supabase.from("users").select();
+
+  if (error) {
+    throw error.message;
+  }
+
+  return users;
 }

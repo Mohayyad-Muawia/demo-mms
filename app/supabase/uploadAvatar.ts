@@ -1,4 +1,4 @@
-import supabase from "./supabase";
+import {supabase} from "./supabase";
 
 const uploadAvatar = async (file: File, uid: string) => {
   const fileExt = file.name.split(".").pop();

@@ -1,4 +1,4 @@
-import supabase from "./supabase";
+import {supabase} from "./supabase";
 
 const uploadProof = async (file: File) => {
   const fileExt = file.name.split(".").pop();

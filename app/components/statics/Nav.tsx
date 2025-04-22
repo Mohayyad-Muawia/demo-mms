@@ -1,5 +1,5 @@
 "use client";
-import { ClipboardList, House, Info, LogOut, User } from "lucide-react";
+import { ClipboardList, House, Info, LogOut, User, Users } from "lucide-react";
 import "./statics.css";
 import Link from "next/link";
 import Image from "next/image";
@@ -66,6 +66,10 @@ export default function Nav() {
           <Link href="/profile" className={path === "/profile" ? "active" : ""}>
             <User />
             الملف الشخصي
+          </Link>
+          <Link href="/users" className={path === "/users" ? "active" : ""}>
+            <Users />
+            المستخدمين
           </Link>
           <Link href="/help" className={path === "/help" ? "active" : ""}>
             <Info />

@@ -33,6 +33,8 @@ export default function Header() {
         return "قائمة الأجهزة";
       case "/profile":
         return "الملف الشخصي";
+      case "/users":
+        return "المستخدمين";
       case "/help":
         return "المساعدة";
       default:

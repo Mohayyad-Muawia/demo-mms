@@ -1,0 +1,80 @@
+.users {
+  padding: 40px;
+  display: flex;
+  flex-flow: column;
+  gap: 15px;
+
+  .user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+
+    &.head {
+      border-bottom: 1px solid var(--ghost);
+      text-align: start;
+
+      > div {
+        width: 40px;
+      }
+
+      span {
+        justify-content: center;
+      }
+    }
+
+    img {
+      height: 40px;
+      aspect-ratio: 1/1;
+      border-radius: 8px;
+    }
+    p,
+    b {
+      width: 140px;
+    }
+    span {
+      display: flex;
+      justify-content: end;
+      width: 140px;
+      gap: 10px;
+
+      .badge {
+        padding: 5px 15px;
+        border-radius: 24px;
+        font-size: 14px;
+        width: fit-content;
+        font-weight: bold;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        svg {
+          width: 22px;
+          aspect-ratio: 1/1;
+        }
+      }
+
+      &.dev .badge {
+        background-color: var(--light-yellow);
+        color: #f2cb05;
+      }
+      &.man .badge {
+        background-color: #0278bd3a;
+        color: #0277bd;
+      }
+      &.adm .badge {
+        background-color: var(--light-green);
+        color: #52b788;
+      }
+    }
+  }
+
+  button {
+    svg {
+      fill: none !important;
+      color: #fff !important;
+      stroke-width: 2.5px;
+    }
+  }
+}
