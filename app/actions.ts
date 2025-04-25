@@ -4,6 +4,7 @@ import { UserType } from "./context/useUserStore";
 import uploadAvatar from "./supabase/uploadAvatar";
 import { Device } from "./context/useDevicesStore";
 import nodemailer from "nodemailer";
+import { transliterate } from "transliteration";
 
 const getUser = async (username: string) => {
   // البحث عن البريد الإلكتروني باستخدام اسم المستخدم
@@ -245,4 +246,49 @@ export async function getAllUsers() {
   }
 
   return users;
+}
+
+export async function AddNewUser(formData: FormData) {
+  const fullname = formData.get("fullname") as string;
+  const username = formData.get("username") as string;
+  const role = formData.get("role") as string;
+  const password = formData.get("password") as string;
+  
+  const email = createFakeEmail(username)
+
+  const { error } = await supabase.auth.signUp({
+    email: email,
+    password: password,
+  })
+  
+  if (error) {
+    console.error('Error Adding up:', error.message)
+      return { error: "خطأ اثناء اضافة المستخدم" };
+
+  }
+  
+  const { data: user, error: userErr } = await supabase.from("users").insert({
+    fullname, username, role, email
+  }).select().single()
+  
+  if (userErr) {
+    console.error("Supabase Error:", userErr.message);
+    return { error: "خطأ اثناء اضافة المستخدم" };
+  }
+
+  return {
+    success: true,
+    user: {
+      username: user.username,
+      fullname: user.fullname,
+      avatar: user.avatar || "/avtr.png",
+      role: user.role,
+    },
+  };
+
+}
+
+function createFakeEmail(uname: string) {
+    const email = `${transliterate(uname)}@mms.sd`
+    return email
 }

@@ -1,5 +1,13 @@
 "use client";
-import { ClipboardList, House, Info, LogOut, User, Users } from "lucide-react";
+import {
+  Bolt,
+  ClipboardList,
+  House,
+  Info,
+  LogOut,
+  User,
+  Users,
+} from "lucide-react";
 import "./statics.css";
 import Link from "next/link";
 import Image from "next/image";
@@ -59,18 +67,30 @@ export default function Nav() {
             <House />
             الصفحة الرئيسية
           </Link>
+
           <Link href="/list" className={path === "/list" ? "active" : ""}>
             <ClipboardList />
             قائمة الأجهزة
           </Link>
+
+          <Link href="/spares" className={path === "/spares" ? "active" : ""}>
+            <Bolt />
+            الاسبيرات
+          </Link>
+
           <Link href="/profile" className={path === "/profile" ? "active" : ""}>
             <User />
             الملف الشخصي
           </Link>
-          <Link href="/users" className={path === "/users" ? "active" : ""}>
-            <Users />
-            المستخدمين
-          </Link>
+
+          {/* حماية من من لا يملك صلاحيات مدير نظام او مطور */}
+          {(user.role === "مدير النظام" || user.role === "المطور") && (
+            <Link href="/users" className={path === "/users" ? "active" : ""}>
+              <Users />
+              المستخدمين
+            </Link>
+          )}
+
           <Link href="/help" className={path === "/help" ? "active" : ""}>
             <Info />
             المساعدة

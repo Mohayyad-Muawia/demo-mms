@@ -29,6 +29,11 @@
   --light-yellow: #f2cb0544;
   --light-green: #52b78825;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   direction: rtl;
   transition: var(--transition);
