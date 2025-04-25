@@ -1,7 +1,7 @@
 "use client";
 import "react-circular-progressbar/dist/styles.css";
 import "./spares.css";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 export type SparePart = {
   id?: string;
@@ -10,15 +10,6 @@ export type SparePart = {
   quantity: number;
   maxQuantity: number;
   price: number;
-};
-const categoryColors: {
-  [key: string]: string;
-} = {
-  طابعات: "#16a34a",
-  أحبار: "#0d6efd",
-  "ماكينات تصوير": "#f59e0b",
-  مستلزمات: "#9333ea",
-  ملحقات: "#e11d48",
 };
 
 export const TakeForm = ({
