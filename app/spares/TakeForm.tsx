@@ -1,8 +1,6 @@
 "use client";
-import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import "./spares.css";
-import { Bolt, PackageMinus } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 
 export type SparePart = {
@@ -30,7 +28,6 @@ export const TakeForm = ({
   spare: SparePart;
   setShowTakeForm: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const color = categoryColors[spare.category] || "#e5e7eb";
   return (
     <div className="takeForm">
       <div className="popup">

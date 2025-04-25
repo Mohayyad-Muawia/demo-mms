@@ -93,7 +93,7 @@ export default function Users() {
     setIsLoading(true);
 
     try {
-      const result = await toast.promise(AddNewUser(formData), {
+      await toast.promise(AddNewUser(formData), {
         loading: "جارٍ اضافة المستخدم",
         success: (result) => {
           if (result?.success && result.user) {

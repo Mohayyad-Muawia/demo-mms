@@ -3,7 +3,7 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import "./spares.css";
 import { Bolt, PackageMinus } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { TakeForm } from "./TakeForm";
 import SpareForm from "./SpareForm";
 
