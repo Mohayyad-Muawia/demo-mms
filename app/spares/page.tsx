@@ -3,12 +3,14 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import "./spares.css";
 import { Bolt, PackageMinus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TakeForm } from "./TakeForm";
 import SpareForm from "./SpareForm";
+import { getAllSpares } from "../actions";
+import toast from "react-hot-toast";
 
 export type SparePart = {
-  id?: string;
+  id: string;
   name: string;
   category: string;
   quantity: number;
@@ -26,155 +28,39 @@ const categoryColors: {
   ملحقات: "#e11d48",
 };
 
-const spareParts: SparePart[] = [
-  {
-    name: "طابعة HP 1102 رأس",
-    category: "طابعات",
-    quantity: 10,
-    maxQuantity: 10,
-    price: 15000,
-  },
-  {
-    name: "حبر كانون 737",
-    category: "أحبار",
-    quantity: 12,
-    maxQuantity: 20,
-    price: 8000,
-  },
-  {
-    name: "درم ماكينة تصوير Ricoh",
-    category: "ماكينات تصوير",
-    quantity: 3,
-    maxQuantity: 5,
-    price: 22000,
-  },
-  {
-    name: "سخان طابعة HP 1020",
-    category: "طابعات",
-    quantity: 2,
-    maxQuantity: 6,
-    price: 10000,
-  },
-  {
-    name: "مخزن ورق A4",
-    category: "مستلزمات",
-    quantity: 10,
-    maxQuantity: 15,
-    price: 500,
-  },
-  {
-    name: "سير ماكينة تصوير",
-    category: "ماكينات تصوير",
-    quantity: 1,
-    maxQuantity: 3,
-    price: 25000,
-  },
-  {
-    name: "وحدة تغذية أوراق",
-    category: "ملحقات",
-    quantity: 6,
-    maxQuantity: 10,
-    price: 3500,
-  },
-  {
-    name: "لوحة تشغيل طابعة كانون",
-    category: "طابعات",
-    quantity: 4,
-    maxQuantity: 7,
-    price: 9000,
-  },
-  {
-    name: "شريحة حبر HP",
-    category: "أحبار",
-    quantity: 8,
-    maxQuantity: 12,
-    price: 3000,
-  },
-  {
-    name: "عدسة سكانر",
-    category: "ملحقات",
-    quantity: 2,
-    maxQuantity: 4,
-    price: 7000,
-  },
-  {
-    name: "رأس طابعة Epson",
-    category: "طابعات",
-    quantity: 3,
-    maxQuantity: 6,
-    price: 18000,
-  },
-  {
-    name: "حبر Epson T6641",
-    category: "أحبار",
-    quantity: 15,
-    maxQuantity: 20,
-    price: 2500,
-  },
-  {
-    name: "كابل USB طابعة",
-    category: "مستلزمات",
-    quantity: 25,
-    maxQuantity: 30,
-    price: 1500,
-  },
-  {
-    name: "بكرة ماكينة تصوير",
-    category: "ماكينات تصوير",
-    quantity: 5,
-    maxQuantity: 8,
-    price: 9000,
-  },
-  {
-    name: "حساس ورق",
-    category: "ملحقات",
-    quantity: 7,
-    maxQuantity: 10,
-    price: 2800,
-  },
-  {
-    name: "محرك سحب ورق",
-    category: "ماكينات تصوير",
-    quantity: 2,
-    maxQuantity: 4,
-    price: 13000,
-  },
-  {
-    name: "وحدة حبر ملونة",
-    category: "أحبار",
-    quantity: 6,
-    maxQuantity: 10,
-    price: 9500,
-  },
-  {
-    name: "مفتاح تشغيل طابعة",
-    category: "طابعات",
-    quantity: 9,
-    maxQuantity: 12,
-    price: 1200,
-  },
-  {
-    name: "كارت باور ماكينة تصوير",
-    category: "ماكينات تصوير",
-    quantity: 1,
-    maxQuantity: 2,
-    price: 30000,
-  },
-  {
-    name: "شاشة عرض",
-    category: "ملحقات",
-    quantity: 2,
-    maxQuantity: 3,
-    price: 11000,
-  },
-];
-
 export default function Spares() {
+  const [spareParts, setSpareParts] = useState<SparePart[]>([]);
+  const [status, setStatus] = useState<string | null>(
+    "جارٍ تحميل الاسبيرات..."
+  );
   const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
   const [showTakeForm, setShowTakeForm] = useState(false);
   const [showSpareForm, setShowSpareForm] = useState(false);
   const [spareFormType, setSpareFormType] = useState<"add" | "edit">("edit");
   const [selectedSpare, setSelectedSpare] = useState<SparePart | null>(null);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const data = await getAllSpares();
+        setSpareParts(data || []);
+
+        if (!data || data.length === 0) {
+          setStatus("لم يتم العثور على اسبيرات");
+        } else {
+          setStatus(null);
+        }
+      } catch (err) {
+        setStatus("فشل في تحميل الاسبيرات");
+        const errorMessage =
+          err instanceof Error ? err.message : "حدث خطأ غير متوقع";
+        toast.error(errorMessage);
+        console.error("Failed to fetch Spares:", errorMessage);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const handleFlip = (index: number) => {
     if (flippedIndex === index) {
@@ -223,6 +109,8 @@ export default function Spares() {
           اضافة اسبير
         </button>
       </div>
+
+      {status && <div className="status">{status}</div>}
 
       <div className="list">
         {Object.keys(categoryColors).map((category) => {
@@ -321,7 +209,11 @@ export default function Spares() {
       </div>
 
       {showTakeForm && selectedSpare && (
-        <TakeForm spare={selectedSpare} setShowTakeForm={setShowTakeForm} />
+        <TakeForm
+          spare={selectedSpare}
+          setShowTakeForm={setShowTakeForm}
+          setSpares={setSpareParts}
+        />
       )}
 
       {showSpareForm && (
@@ -329,6 +221,7 @@ export default function Spares() {
           spare={selectedSpare}
           setShowSpareForm={setShowSpareForm}
           type={spareFormType}
+          setSpares={setSpareParts}
         />
       )}
     </div>

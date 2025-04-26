@@ -31,6 +31,8 @@ export default function Header() {
         return "الصفحة الرئيسية";
       case "/list":
         return "قائمة الأجهزة";
+      case "/spares":
+        return "الاسبيرات";
       case "/profile":
         return "الملف الشخصي";
       case "/users":

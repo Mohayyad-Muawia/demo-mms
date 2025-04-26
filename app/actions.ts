@@ -5,6 +5,7 @@ import uploadAvatar from "./supabase/uploadAvatar";
 import { Device } from "./context/useDevicesStore";
 import nodemailer from "nodemailer";
 import { transliterate } from "transliteration";
+import { SparePart } from "./spares/page";
 
 const getUser = async (username: string) => {
   // البحث عن البريد الإلكتروني باستخدام اسم المستخدم
@@ -291,4 +292,134 @@ export async function AddNewUser(formData: FormData) {
 function createFakeEmail(uname: string) {
     const email = `${transliterate(uname)}@mms.sd`
     return email
+}
+
+
+// spares
+export async function getAllSpares(){
+  const { data: spares, error } = await supabase.from("spares").select();
+
+  if (error) {
+    throw error.message;
+  }
+
+  return spares;
+}
+
+export async function addNewSpare(data: SparePart) {
+  const { name, category, quantity, maxQuantity, price } = data;
+
+  if (
+    !name ||
+    !category ||
+    isNaN(quantity) ||
+    isNaN(maxQuantity) ||
+    isNaN(price)
+  ) {
+    return { error: "الرجاء ملء كل الحقول بشكل صحيح" };
+  }
+
+  const { data: spare, error } = await supabase
+    .from("spares")
+    .insert({
+      name,
+      category,
+      quantity,
+      maxQuantity,
+      price,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Supabase Error:", error.message);
+    return { error: "خطأ اثناء اضافة الاسبير" };
+  }
+
+  return {
+    success: true,
+    spare,
+  };
+}
+
+
+export async function updateSpare(id: string, data: SparePart) {
+  const { name, category, quantity, maxQuantity, price } = data;
+
+  if (
+    !name ||
+    !category ||
+    isNaN(quantity) ||
+    isNaN(maxQuantity) ||
+    isNaN(price)
+  ) {
+    return { error: "الرجاء ملء كل الحقول بشكل صحيح" };
+  }
+
+  const { data: spare, error } = await supabase
+    .from("spares")
+    .update({
+      name,
+      category,
+      quantity,
+      maxQuantity,
+      price,
+    })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Supabase Error:", error.message);
+    return { error: "خطأ اثناء تعديل الاسبير" };
+  }
+
+  return {
+    success: true,
+    spare,
+  };
+}
+
+
+export async function takeSpare(id: string, takenQuantity: number) {
+  if (!takenQuantity || takenQuantity <= 0) {
+    return { error: "الرجاء إدخال كمية صحيحة" };
+  }
+
+  const { data: currentSpare, error: fetchError } = await supabase
+    .from("spares")
+    .select("quantity")
+    .eq("id", id)
+    .single();
+
+  if (fetchError || !currentSpare) {
+    console.error("Supabase Error:", fetchError?.message);
+    return { error: "فشل في جلب بيانات الاسبير" };
+  }
+
+  // نتحقق من الكمية المتاحة
+  if (currentSpare.quantity < takenQuantity) {
+    return { error: "الكمية المدخلة أكبر من الكمية المتاحة" };
+  }
+
+  // نخصم الكمية
+  const newQuantity = currentSpare.quantity - takenQuantity;
+
+  // نحدث الكمية في القاعدة
+  const { data: updatedSpare, error: updateError } = await supabase
+    .from("spares")
+    .update({ quantity: newQuantity })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (updateError) {
+    console.error("Supabase Error:", updateError.message);
+    return { error: "حدث خطأ أثناء تحديث كمية الاسبير" };
+  }
+
+  return {
+    success: true,
+    spare: updatedSpare,
+  };
 }

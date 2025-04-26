@@ -29,6 +29,13 @@
     }
   }
 
+  .status {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    margin-top: 150px;
+  }
+
   .list {
     .category-title {
       font-weight: bold;
