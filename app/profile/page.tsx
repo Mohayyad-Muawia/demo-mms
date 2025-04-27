@@ -6,6 +6,7 @@ import { useUserStore } from "../context/useUserStore";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { server_editProfile } from "../actions";
+import Link from "next/link";
 
 type Avatar = {
   file: File | null;
@@ -193,6 +194,13 @@ export default function Profile() {
           </div>
         </div>
       )}
+      <Link
+        href="/help"
+        className="secondary btn mt-4"
+        style={{ color: "var(--text)" }}
+      >
+        المساعدة والابلاغ عن مشكلة
+      </Link>
     </div>
   );
 }

@@ -88,7 +88,7 @@ export default function Help() {
           </a>
           <a
             className="btn secondary"
-            href="https://t.me/mohayyad"
+            href="https://t.me/mohayyad_muawia"
             target="_blank"
           >
             {icons.telegram}

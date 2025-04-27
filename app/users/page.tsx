@@ -141,7 +141,7 @@ export default function Users() {
           <p>@{usr.username}</p>
           <span className={getStyles(usr).className}>
             <div className="badge">
-              {getStyles(usr).icon} {usr.role}
+              {getStyles(usr).icon} <span className="hideable">{usr.role}</span>
             </div>
           </span>
         </div>

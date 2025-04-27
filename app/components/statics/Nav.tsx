@@ -107,15 +107,29 @@ export default function Nav() {
         <Link href="/" className={path === "/" ? "active" : ""}>
           <House />
         </Link>
+
         <Link href="/list" className={path === "/list" ? "active" : ""}>
           <ClipboardList />
         </Link>
+
+        <Link href="/spares" className={path === "/spares" ? "active" : ""}>
+          <Bolt />
+        </Link>
+
         <Link href="/profile" className={path === "/profile" ? "active" : ""}>
           <User />
         </Link>
-        <Link href="/help" className={path === "/help" ? "active" : ""}>
+
+        {/* حماية من من لا يملك صلاحيات مدير نظام او مطور */}
+        {(user.role === "مدير النظام" || user.role === "المطور") && (
+          <Link href="/users" className={path === "/users" ? "active" : ""}>
+            <Users />
+          </Link>
+        )}
+
+        {/* <Link href="/help" className={path === "/help" ? "active" : ""}>
           <Info />
-        </Link>
+        </Link> */}
       </div>
     </>
   );

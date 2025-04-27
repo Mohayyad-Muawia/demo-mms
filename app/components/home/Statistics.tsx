@@ -9,6 +9,7 @@ import {
   Printer,
   Wrench,
 } from "lucide-react";
+import Link from "next/link";
 
 // Define the type for StatBox props
 interface StatBoxProps {
@@ -16,6 +17,7 @@ interface StatBoxProps {
   value: number | "--";
   color: string;
   svg: React.ReactNode;
+  link?: string;
 }
 
 export default function Statistics() {
@@ -27,7 +29,7 @@ export default function Statistics() {
     year: "numeric",
   }).format(today);
 
-  //   get statistics
+  // get statistics
   const { devices } = useDevicesStore();
 
   const statistics = {
@@ -54,24 +56,28 @@ export default function Statistics() {
           value={statistics.received || "--"}
           color="#52b788"
           svg={<CheckCheck />}
+          link="tab=received"
         />
         <StatBox
           label="الاجهزة الجاهزة"
           value={statistics.ready || "--"}
           color="#f2cb05"
           svg={<PackageCheck />}
+          link="tab=ready"
         />
         <StatBox
           label="الاجهزة تحت الصيانة"
           value={statistics.repairing || "--"}
           color="#e63946"
           svg={<Wrench />}
+          link="tab=maintenance"
         />
         <StatBox
           label="إجمالي الأجهزة"
           value={statistics.all_devices || "--"}
           color="#4e89ae"
           svg={<Printer />}
+          link="tab=all"
         />
       </div>
     </div>
@@ -79,9 +85,9 @@ export default function Statistics() {
 }
 
 // Reusable StatBox Component with TypeScript
-function StatBox({ label, value, color, svg }: StatBoxProps) {
+function StatBox({ label, value, color, svg, link }: StatBoxProps) {
   return (
-    <div className="stat-box" style={{ "--c": color } as React.CSSProperties}>
+    <Link href={`/list?${link}`} className="stat-box" style={{ "--c": color } as React.CSSProperties}>
       <div className="text">
         <span className="label">
           {svg}
@@ -89,6 +95,6 @@ function StatBox({ label, value, color, svg }: StatBoxProps) {
         </span>
         <span className="value">{value}</span>
       </div>
-    </div>
+    </Link>
   );
 }

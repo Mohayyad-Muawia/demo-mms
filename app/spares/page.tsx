@@ -62,29 +62,44 @@ export default function Spares() {
     fetchUsers();
   }, []);
 
-  const handleFlip = (index: number) => {
+  const handleFlip = (
+    index: number,
+    e: React.TouchEvent | React.MouseEvent
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (flippedIndex === index) {
-      // لو ضغط مرة ثانية على نفس البطاقة، اقفل النافذة كمان
       setShowTakeForm(false);
       setSelectedSpare(null);
       setFlippedIndex(null);
     } else {
       setFlippedIndex(index);
-      setShowTakeForm(false); // اقفل أي نافذة مفتوحة قبل فتح بطاقة جديدة
+      setShowTakeForm(false);
     }
   };
 
-  const openTakeForm = (spare: SparePart) => {
+  const openTakeForm = (
+    spare: SparePart,
+    e: React.TouchEvent | React.MouseEvent
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
     setSelectedSpare(spare);
     setShowTakeForm(true);
   };
 
-  const openSpareForm = (spare: SparePart | null, type: "edit" | "add") => {
+  const openSpareForm = (
+    spare: SparePart | null,
+    type: "edit" | "add",
+    e: React.TouchEvent | React.MouseEvent
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
     setSelectedSpare(spare);
     setShowSpareForm(true);
     setSpareFormType(type);
   };
-
   return (
     <div className="spares">
       <div className="legend">
@@ -103,7 +118,7 @@ export default function Spares() {
         ))}
         <button
           className="btn primary"
-          onClick={() => openSpareForm(null, "add")}
+          onClick={(e) => openSpareForm(null, "add", e)}
         >
           <Bolt />
           اضافة اسبير
@@ -140,8 +155,12 @@ export default function Spares() {
                     <div
                       key={index}
                       className={`spare ${isFlipped ? "fliped" : ""}`}
-                      onClick={() => handleFlip(spareParts.indexOf(part))}
+                      onClick={(e) => handleFlip(spareParts.indexOf(part), e)}
+                      onTouchEnd={(e) =>
+                        handleFlip(spareParts.indexOf(part), e)
+                      }
                     >
+                      {" "}
                       <div
                         className={`card card-inner ${
                           isFlipped ? "fliped" : ""
@@ -177,25 +196,20 @@ export default function Spares() {
                           <div className="options">
                             <button
                               className="btn primary"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                openTakeForm(part);
-                              }}
+                              onClick={(e) => openTakeForm(part, e)}
+                              onTouchEnd={(e) => openTakeForm(part, e)}
                             >
                               <PackageMinus />
                               اخذ اسبير
                             </button>
-
                             <button
                               className="btn outline"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                openSpareForm(part, "edit");
-                              }}
+                              onClick={(e) => openSpareForm(part, "edit", e)}
+                              onTouchEnd={(e) => openSpareForm(part, "edit", e)}
                             >
                               <Bolt />
                               تعديل
-                            </button>
+                            </button>{" "}
                           </div>
                         </div>
                       </div>

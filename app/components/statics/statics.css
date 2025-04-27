@@ -217,6 +217,7 @@ header {
   background: var(--secondary);
   box-shadow: var(--shadow);
   transition: var(--transition);
+  z-index: 90;
 
   a {
     display: flex;

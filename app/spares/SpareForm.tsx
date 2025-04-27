@@ -103,7 +103,7 @@ export default function SpareForm({
       <form onSubmit={handleSubmit} className="popup" ref={formRef}>
         <h1>{type === "edit" ? "تعديل" : "إضافة"} اسبير</h1>
 
-        <div className="half">
+        <div className="half name">
           <label htmlFor="name" className="required">
             اسم الاسبير
           </label>
@@ -116,26 +116,6 @@ export default function SpareForm({
             placeholder="ادخل اسم الاسبير"
             required
           />
-        </div>
-
-        <div className="half">
-          <label htmlFor="category" className="required">
-            الفئة
-          </label>
-          <select
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-          >
-            <option value="">اختر الفئة</option>
-            <option value="طابعات">طابعات</option>
-            <option value="أحبار">أحبار</option>
-            <option value="ماكينات تصوير">ماكينات تصوير</option>
-            <option value="مستلزمات">مستلزمات</option>
-            <option value="ملحقات">ملحقات</option>
-          </select>
         </div>
 
         <div className="half">
@@ -166,6 +146,26 @@ export default function SpareForm({
             required
             min={0}
           />
+        </div>
+
+        <div className="half">
+          <label htmlFor="category" className="required">
+            الفئة
+          </label>
+          <select
+            id="category"
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            required
+          >
+            <option value="">اختر الفئة</option>
+            <option value="طابعات">طابعات</option>
+            <option value="أحبار">أحبار</option>
+            <option value="ماكينات تصوير">ماكينات تصوير</option>
+            <option value="مستلزمات">مستلزمات</option>
+            <option value="ملحقات">ملحقات</option>
+          </select>
         </div>
 
         <div className="half">

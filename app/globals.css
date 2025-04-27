@@ -272,7 +272,7 @@ textarea,
     margin-bottom: 180px;
   }
   .hideable {
-    display: none;
+    display: none !important;
   }
   .page {
     padding: 20px;

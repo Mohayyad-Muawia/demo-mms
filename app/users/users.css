@@ -40,7 +40,7 @@
     b {
       width: 140px;
     }
-    span {
+    > span {
       display: flex;
       justify-content: end;
       width: 140px;
@@ -124,6 +124,59 @@
         width: calc(50% - 20px);
         height: 50px;
         margin-top: auto;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .users {
+    padding: 20px;
+    .user {
+      font-size: 12px;
+
+      img {
+        height: 35px;
+      }
+      span {
+        .badge {
+          padding: 0px;
+          width: 30px;
+          height: 30px;
+          display: grid;
+          place-content: center;
+
+          svg {
+            width: 18px;
+          }
+        }
+      }
+      p,
+      b,
+      span {
+        width: auto;
+      }
+    }
+    .addUserForm {
+      h1 {
+        font-size: 24px;
+      }
+      form {
+        padding-bottom: 60px;
+        gap: 25px;
+
+        input,
+        select,
+        label {
+          font-size: 14px;
+        }
+
+        .half {
+          width: 100%;
+        }
+        button {
+          width: 100%;
+        }
       }
     }
   }
