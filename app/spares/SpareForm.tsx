@@ -14,11 +14,11 @@ export default function SpareForm({
   setShowSpareForm: Dispatch<SetStateAction<boolean>>;
   setSpares: Dispatch<SetStateAction<SparePart[]>>;
 }) {
-  const [formData, setFormData] = useState<SparePart>({
+  const [formData, setFormData] = useState({
     name: spare?.name || "",
     category: spare?.category || "",
-    quantity: spare?.quantity || 0,
-    maxQuantity: spare?.maxQuantity || 0,
+    quantity: spare ? String(spare.quantity) : "",
+    maxQuantity: spare ? String(spare.maxQuantity) : "",
     price: spare?.price || 0,
     id: spare?.id || "",
   });
@@ -33,11 +33,9 @@ export default function SpareForm({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({
       ...prev,
-      [name]:
-        name === "quantity" || name === "maxQuantity" ? Number(value) : value,
+      [name]: value,
     }));
   };
 
@@ -54,20 +52,25 @@ export default function SpareForm({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formDataToSend = new FormData(e.currentTarget);
     setIsLoading(true);
+
+    const preparedFormData = {
+      ...formData,
+      quantity: Number(formData.quantity) || 0,
+      maxQuantity: Number(formData.maxQuantity) || 0,
+      price: Number(formData.price) || 0,
+    };
 
     try {
       await toast.promise(
         type === "add"
-          ? addNewSpare(formData)
-          : updateSpare(formData.id, formData),
+          ? addNewSpare(preparedFormData)
+          : updateSpare(formData.id, preparedFormData),
         {
           loading: type === "add" ? "جارٍ إضافة الاسبير" : "جارٍ تعديل الاسبير",
           success: (result) => {
             if (result?.success && result.spare) {
               formRef.current?.reset();
-
               setSpares((prev) => {
                 if (type === "add") {
                   return [...prev, result.spare];
@@ -125,11 +128,13 @@ export default function SpareForm({
           <input
             id="quantity"
             name="quantity"
-            type="number"
+            type="text"
             value={formData.quantity}
             onChange={handleChange}
             required
-            min={0}
+            inputMode="numeric"
+            pattern="[0-9]*"
+            placeholder="ادخل الكمية الحالية"
           />
         </div>
 
@@ -140,11 +145,13 @@ export default function SpareForm({
           <input
             id="maxQuantity"
             name="maxQuantity"
-            type="number"
+            type="text"
             value={formData.maxQuantity}
             onChange={handleChange}
             required
-            min={0}
+            inputMode="numeric"
+            pattern="[0-9]*"
+            placeholder="ادخل الكمية القصوى"
           />
         </div>
 
