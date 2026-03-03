@@ -1,10 +1,9 @@
 "use server";
-import {supabase} from "./supabase/supabase";
+import { supabase } from "./supabase/supabase";
 import { UserType } from "./context/useUserStore";
 import uploadAvatar from "./supabase/uploadAvatar";
 import { Device } from "./context/useDevicesStore";
 import nodemailer from "nodemailer";
-import { transliterate } from "transliteration";
 import { SparePart } from "./spares/page";
 
 const getUser = async (username: string) => {
@@ -24,12 +23,15 @@ const getUser = async (username: string) => {
 };
 
 export async function server_login(
-  formData: FormData
+  formData: FormData,
 ): Promise<{ success?: boolean; error?: string; user?: UserType }> {
   const username = formData.get("username") as string;
   const password = formData.get("password") as string;
 
   const user = await getUser(username);
+
+  // LOGGING
+  console.log("Attempting login for user:", { username, password, user });
 
   const { error } = await supabase.auth.signInWithPassword({
     email: user.email,
@@ -115,8 +117,8 @@ export async function server_getAvailableMonths() {
       data.map((device) => {
         const date = new Date(device.created_at);
         return `${date.getFullYear()}-${date.getMonth() + 1}`; // "2024-3"
-      })
-    )
+      }),
+    ),
   ).map((m) => {
     const [year, month] = m.split("-").map(Number);
     return { month, year };
@@ -203,7 +205,7 @@ export async function searchDevices(query: string, type: string) {
   const { data, error } = await supabase
     .from("devices")
     .select("*")
-    .ilike(type, `%${query}%`); // 🔹 البحث غير حساس لحجم الأحرف
+    .ilike(type, `%${query}%`);
 
   if (error)
     return { success: false, error: "حدث خطأ أثناء البحث", devices: [] };
@@ -237,7 +239,6 @@ export async function sendReport(formData: FormData) {
   return { success: true, message: "تم إرسال الإبلاغ بنجاح!" };
 }
 
-
 // users
 export async function getAllUsers() {
   const { data: users, error } = await supabase.from("users").select();
@@ -254,24 +255,30 @@ export async function AddNewUser(formData: FormData) {
   const username = formData.get("username") as string;
   const role = formData.get("role") as string;
   const password = formData.get("password") as string;
-  
-  const email = createFakeEmail(username)
+
+  const email = createFakeEmail(username);
 
   const { error } = await supabase.auth.signUp({
     email: email,
     password: password,
-  })
-  
-  if (error) {
-    console.error('Error Adding up:', error.message)
-      return { error: "خطأ اثناء اضافة المستخدم" };
+  });
 
+  if (error) {
+    console.error("Error Adding up:", error.message);
+    return { error: "خطأ اثناء اضافة المستخدم" };
   }
-  
-  const { data: user, error: userErr } = await supabase.from("users").insert({
-    fullname, username, role, email
-  }).select().single()
-  
+
+  const { data: user, error: userErr } = await supabase
+    .from("users")
+    .insert({
+      fullname,
+      username,
+      role,
+      email,
+    })
+    .select()
+    .single();
+
   if (userErr) {
     console.error("Supabase Error:", userErr.message);
     return { error: "خطأ اثناء اضافة المستخدم" };
@@ -286,17 +293,92 @@ export async function AddNewUser(formData: FormData) {
       role: user.role,
     },
   };
-
 }
 
 function createFakeEmail(uname: string) {
-    const email = `${transliterate(uname)}@mms.sd`
-    return email
+  const local = arabicToSafeLocalPart(uname);
+  return `${local}@mms.sd`;
 }
 
+function arabicToSafeLocalPart(input: string) {
+  if (!input) return "user";
+
+  const s = input.normalize("NFKD").replace(/\p{M}/gu, "");
+
+  const map: Record<string, string> = {
+    ا: "a",
+    أ: "a",
+    إ: "i",
+    آ: "a",
+    ب: "b",
+    ت: "t",
+    ث: "th",
+    ج: "j",
+    ح: "h",
+    خ: "kh",
+    د: "d",
+    ذ: "dh",
+    ر: "r",
+    ز: "z",
+    س: "s",
+    ش: "sh",
+    ص: "s",
+    ض: "d",
+    ط: "t",
+    ظ: "z",
+    ع: "`",
+    غ: "gh",
+    ف: "f",
+    ق: "q",
+    ك: "k",
+    ل: "l",
+    م: "m",
+    ن: "n",
+    ه: "h",
+    و: "w",
+    ؤ: "w",
+    ي: "y",
+    ئ: "y",
+    ى: "a",
+    ة: "h",
+    ء: "",
+    ـ: "",
+  };
+
+  const words = s
+    .trim()
+    .replace(/[_+\/\\@#\$%\^\&\*\(\)\[\]\{\}<>~`"'|:;,+]/g, " ")
+    .split(/\s+/);
+
+  const transliteratedWords = words
+    .map((word) => {
+      let out = "";
+      for (const ch of word) {
+        if (map[ch]) out += map[ch];
+        else {
+          if (/[A-Za-z0-9]/.test(ch)) out += ch;
+        }
+      }
+      return out;
+    })
+    .filter(Boolean);
+
+  let local = transliteratedWords.join(".");
+
+  local = local.toLowerCase().replace(/[^a-z0-9._-]/g, "");
+
+  local = local.replace(/\.{2,}/g, ".").replace(/-{2,}/g, "-");
+
+  local = local.replace(/^[.-]+|[.-]+$/g, "");
+
+  if (!local) local = "user";
+  if (local.length > 64) local = local.slice(0, 64);
+
+  return local;
+}
 
 // spares
-export async function getAllSpares(){
+export async function getAllSpares() {
   const { data: spares, error } = await supabase.from("spares").select();
 
   if (error) {
@@ -342,7 +424,6 @@ export async function addNewSpare(data: SparePart) {
   };
 }
 
-
 export async function updateSpare(id: string, data: SparePart) {
   const { name, category, quantity, maxQuantity, price } = data;
 
@@ -379,7 +460,6 @@ export async function updateSpare(id: string, data: SparePart) {
     spare,
   };
 }
-
 
 export async function takeSpare(id: string, takenQuantity: number) {
   if (!takenQuantity || takenQuantity <= 0) {

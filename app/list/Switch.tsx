@@ -13,13 +13,16 @@ export default function Switch({ all_devices }: SwitchProps) {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState("all");
   const [filteredDevices, setFilteredDevices] = useState<Device[]>(
-    all_devices || []
+    all_devices || [],
   );
 
   useEffect(() => {
     // تحقق من وجود معلمة tab في URL عند التحميل
-    const tabFromUrl = searchParams.get('tab');
-    if (tabFromUrl && ['all', 'maintenance', 'ready', 'received'].includes(tabFromUrl)) {
+    const tabFromUrl = searchParams.get("tab");
+    if (
+      tabFromUrl &&
+      ["all", "maintenance", "ready", "received"].includes(tabFromUrl)
+    ) {
       setActiveTab(tabFromUrl);
     }
   }, [searchParams]);

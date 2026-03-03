@@ -11,12 +11,12 @@ const EditForm = ({ device }: { device: Device }) => {
   const formRef = useRef<HTMLFormElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [showFileBtn, setShowFileBtn] = useState(
-    device.paymentProof ? true : false
+    device.paymentProof ? true : false,
   );
   const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
   const [paymentProof, setPaymentProof] = useState<string | null>(
-    device.paymentProof
+    device.paymentProof,
   );
   const { updateDevice } = useDevicesStore();
 
@@ -93,7 +93,7 @@ const EditForm = ({ device }: { device: Device }) => {
         (formData.get("description") as string) || device.description,
       price:
         parseFloat(
-          (formData.get("price") as string).replace(/,/g, "") || "0"
+          (formData.get("price") as string).replace(/,/g, "") || "0",
         ) || device.price, // Update price with formatted value
     };
 
@@ -132,7 +132,7 @@ const EditForm = ({ device }: { device: Device }) => {
 
       <div className={`overlay ${isOpen ? "show" : ""}`}></div>
 
-      <div className={`popup ${isOpen ? "show" : ""}`}>
+      <div className={`popup ${isOpen ? "show" : ""}`} key={device.id}>
         <h2>تعديل بيانات الجهاز</h2>
         <form ref={formRef} onSubmit={handleSubmit}>
           <div className="half">
